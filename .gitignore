@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+.uv/
+
+# IDE / editor
+.vscode/
+.idea/
+.DS_Store
+
+# Ruff cache
+.ruff_cache/
