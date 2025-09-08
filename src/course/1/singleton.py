@@ -42,5 +42,6 @@ if __name__ == "__main__":
     # Singleton через импорт
     from singleton_module import singleton_instance as s1
     from singleton_module import singleton_instance as s2
+
     assert s1 is s2
     assert s2.value == 100
