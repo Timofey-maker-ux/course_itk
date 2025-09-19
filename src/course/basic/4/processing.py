@@ -1,5 +1,4 @@
 import json
-import math
 import multiprocessing
 import random
 import time
@@ -7,31 +6,35 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
 
 def generate_data(n):
-    return [random.randint(1, 1000) for _ in range(n)]
+    return [random.randint(100, 1000) for _ in range(n)]
 
 
 def process_number(n):
-    return math.factorial(n)
+    factorial = 1
+    while n > 1:
+        factorial *= n
+        n -= 1
+    return factorial
 
 
 def run_single(data):
-    start = time.time()
+    start = time.perf_counter()
     [process_number(n) for n in data]
-    return time.time() - start
+    return time.perf_counter() - start
 
 
 def run_threadpool(data):
-    start = time.time()
+    start = time.perf_counter()
     with ThreadPoolExecutor() as executor:
-        list(executor.map(process_number, data))
-    return time.time() - start
+        executor.map(process_number, data)
+    return time.perf_counter() - start
 
 
 def run_processpool(data):
-    start = time.time()
+    start = time.perf_counter()
     with ProcessPoolExecutor() as executor:
-        list(executor.map(process_number, data))
-    return time.time() - start
+        executor.map(process_number, data)
+    return time.perf_counter() - start
 
 
 def worker(input_queue, output_queue):
@@ -44,7 +47,7 @@ def worker(input_queue, output_queue):
 
 
 def run_multiprocessing_process(data):
-    start = time.time()
+    start = time.perf_counter()
     cpu_count = multiprocessing.cpu_count()
     input_queue = multiprocessing.Queue()
     output_queue = multiprocessing.Queue()
@@ -67,11 +70,11 @@ def run_multiprocessing_process(data):
     for p in processes:
         p.join()
 
-    return time.time() - start
+    return time.perf_counter() - start
 
 
 def main():
-    N = 100000
+    N = 100
     data = generate_data(N)
 
     times = dict()
